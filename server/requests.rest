@@ -25,8 +25,25 @@ x-access-token:
 
 ###
 GET http://localhost:3000/api/posts
-x-access-token:
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInVzZXJuYW1lIjoibWlja2V5IiwiaWF0IjoxNjY3MjM3NDU5fQ.Ky5w_DuxZUwUarnbAqUc7p3_2D290mKRS56fDCxAA14
 
 ###
 DELETE http://localhost:3000/api/posts/72
 x-access-token:
+
+###
+GET http://localhost:3000/api/search/users
+
+###
+POST http://localhost:3000/api/likes/2
+Content-Type: application/json
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInVzZXJuYW1lIjoibWlja2V5IiwiaWF0IjoxNjY3MjM3NDU5fQ.Ky5w_DuxZUwUarnbAqUc7p3_2D290mKRS56fDCxAA14
+
+{
+  "userId": 4
+}
+
+###
+GET http://localhost:3000/api/user/likes/4
+Content-Type: application/json
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInVzZXJuYW1lIjoibWlja2V5IiwiaWF0IjoxNjY3MjM3NDU5fQ.Ky5w_DuxZUwUarnbAqUc7p3_2D290mKRS56fDCxAA14

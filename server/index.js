@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.static(publicPath));
 app.use(express.json());
 
-app.get('/api/users', (req, res, next) => {
+app.get('/api/search/users', (req, res, next) => {
   const sql = `
     select "userId",
            "username",
@@ -296,7 +296,7 @@ app.get('/api/posts', (req, res, next) => {
 
 app.delete('/api/posts/:postId', (req, res, next) => {
   const { userId } = req.user;
-  const postId = Number(req.params.postId);
+  const postId = Number(req.body.postId);
 
   if (!Number.isInteger(postId) || postId <= 0) {
     throw new ClientError(400, 'postId must be a positive integer');
@@ -309,6 +309,53 @@ app.delete('/api/posts/:postId', (req, res, next) => {
     returning *
   `;
   const params = [postId, userId];
+
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows[0]);
+    })
+    .catch(err => next(err));
+});
+
+app.post('/api/likes/:postId', uploadsMiddleware, (req, res, next) => {
+  const { userId } = req.user;
+  const postId = Number(req.params.postId);
+
+  if (!userId) {
+    throw new ClientError(400, 'could not find user');
+  }
+  if (!Number.isInteger(postId) || postId <= 0) {
+    throw new ClientError(400, 'postId must be a positive integer');
+  }
+
+  const sql = `
+    insert into "likes" ("postId", "userId")
+    values ($1, $2)
+    returning *
+  `;
+  const params = [postId, userId];
+
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows[0]);
+    })
+    .catch(err => next(err));
+});
+
+app.get('/api/user/likes/:userId', uploadsMiddleware, (req, res, next) => {
+  const { userId } = req.user;
+
+  if (!userId) {
+    throw new ClientError(400, 'could not find user');
+  }
+
+  const sql = `
+    select *
+    from "posts"
+    join "likes" using ("userId")
+    where "userId" = $1
+  `;
+  const params = [userId];
 
   db.query(sql, params)
     .then(result => {

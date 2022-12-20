@@ -25,4 +25,22 @@
     top: 30% !important;
     left: 11% !important;
   }
+
+  .mobile-search {
+    display: block !important;
+    position: fixed !important;
+
+    /* top: 0% !important; */
+
+    /* right: 0% !important; */
+    width: 100% !important;
+    max-width: 390px !important;
+    height: 100% !important;
+    background-color: white;
+  }
+
+  .searchbar-wrapper,
+  .searchbar {
+    width: 275px !important;
+  }
 }

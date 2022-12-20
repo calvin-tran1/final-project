@@ -1,5 +1,6 @@
 import React from 'react';
 import Avatar from './avatar';
+import DesktopSearchbar from './search-bar';
 import AppContext from '../lib/app-context';
 
 export default class MobileTopNav extends React.Component {
@@ -10,7 +11,8 @@ export default class MobileTopNav extends React.Component {
       displayName: '',
       image: '',
       bio: '',
-      active: false
+      active: false,
+      search: true
     };
   }
 
@@ -36,40 +38,43 @@ export default class MobileTopNav extends React.Component {
   renderNavComponent() {
     const { route } = this.context;
 
-    if (route.path === 'home') {
+    if (route.path === `${this.state.username}` && this.state.search === true) {
+      return <DesktopSearchbar />;
+    }
+    if (route.path === 'home' && this.state.search === false) {
       return <button type="button" className="mobile-nav-btn" onClick={this.props.onClick}>
                 <Avatar
                   imageUrl={this.state.image}
-                  name="test"
+                  name={this.state.displayName}
                   width="33px"
                   height="33px"
                 />
               </button>;
     }
-    if (route.path === 'profile') {
+    if (route.path === `${this.state.username}` && this.state.search === false) {
       return <button type="button" className="mobile-back-btn">
               <a href="#home">
                 <i className="fa-solid fa-arrow-left" />
               </a>
-              </button>;
+             </button>;
     }
   }
 
   renderHeading() {
     const { route } = this.context;
 
-    if (route.path === 'home') {
-      return <p className="mobile-nav-title">Home</p>;
+    if (route.path === 'home' && this.state.search === false) {
+      return <p className="mobile-nav-title pt-3">Home</p>;
     }
-    if (route.path === 'profile') {
-      return <p className = "mobile-nav-title">{this.state.displayName}</p>;
+    if (route.path === `${this.state.username}` && this.state.search === false) {
+      return <p className="mobile-nav-title pt-3">{this.state.displayName}</p>;
     }
   }
 
   render() {
     return (
       <div className="row top-nav p-0 m-0 position-fixed d-lg-block d-lg-none d-xl-block d-xl-none">
-        <div className="col">
+        <div className="col align-items-center">
           {this.renderNavComponent()}
           {this.renderHeading()}
         </div>

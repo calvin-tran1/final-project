@@ -64,7 +64,7 @@ export default class MobileNavMenu extends React.Component {
         </div>
         <div className="mobile-nav-wrapper">
           <div className="mobile-profile-icon-wrapper mx-3 mt-4">
-            <a href="#profile">
+            <a href={`#${this.state.username}`}>
               <i className="fa-solid fa-user mobile-profile-icon" />
               <span className="mobile-profile-icon-text">Profile</span>
             </a>

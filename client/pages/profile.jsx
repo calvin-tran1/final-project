@@ -11,6 +11,7 @@ import PostForm from '../components/post-form';
 import Avatar from '../components/avatar';
 import PostCard from '../components/post-card';
 import dateFormat from 'dateformat';
+import MobileSearch from '../components/mobile-search';
 
 export default class Profile extends React.Component {
   constructor(props) {
@@ -23,8 +24,10 @@ export default class Profile extends React.Component {
       bio: '',
       active: false,
       postForm: false,
+      mobileSearch: true,
       mobileView: false,
       posts: [],
+      likes: [],
       deletePostId: null,
       optionsMenu: false,
       deleteModal: false
@@ -36,6 +39,7 @@ export default class Profile extends React.Component {
     this.handleResetOptions = this.handleResetOptions.bind(this);
     this.handleDeleteModal = this.handleDeleteModal.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleLike = this.handleLike.bind(this);
   }
 
   componentDidMount() {
@@ -150,6 +154,21 @@ export default class Profile extends React.Component {
 
   }
 
+  handleLike(e) {
+    const token = window.localStorage.getItem('jwt');
+    const req = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Access-Token': token
+      }
+    };
+
+    fetch(`/api/likes/${parseInt(e.target.getAttribute('data-post-id'))}`, req)
+      .then(res => res.json())
+      .catch(err => console.error(err));
+  }
+
   render() {
     const { user, handleSignOut } = this.context;
 
@@ -179,6 +198,7 @@ export default class Profile extends React.Component {
             postOptionsBtn={this.handleOptions}
             postOptionsBtnClass={postOptions ? 'd-none' : 'visible'}
             deleteBtn={this.handleDeleteModal}
+            likeBtn={this.handleLike}
           />
         );
       });
@@ -230,6 +250,9 @@ export default class Profile extends React.Component {
               onClick={this.postModal}
               updatePosts={this.updatePosts}
             />
+            <MobileSearch
+              searchResults={this.state.mobileSearch ? 'mobile-search' : 'd-none'}
+            />
             <div className="profile-banner mx-0 px-0">
               <div className="row mx-0 mb-3 px-0">
                 <div className="col">
@@ -280,7 +303,10 @@ export default class Profile extends React.Component {
           <div className="col bg-secondary-color d-none d-lg-block">
             <DesktopSearchbar />
           </div>
-          <MobileBotNav openPost={this.postModal} />
+          <MobileBotNav
+          openPost={this.postModal}
+          searchResults={this.mobileSearch}
+          />
         </div>
       </div>
     );

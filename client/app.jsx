@@ -27,7 +27,10 @@ export default class App extends React.Component {
     });
     const token = window.localStorage.getItem('jwt');
     const user = token ? jwtDecode(token) : null;
-    this.setState({ user, username: user.username, isAuthorizing: false });
+    this.setState({ user, isAuthorizing: false });
+    if (user) {
+      this.setState({ username: user.username });
+    }
   }
 
   handleSignIn(result) {

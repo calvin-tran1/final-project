@@ -15,7 +15,7 @@ export default class MobileBotNav extends React.Component {
           </button>
         </div>
         <div className="col mobile-search-btn">
-          <button type="button">
+          <button type="button" onClick={this.props.mobileSearchForm}>
             <i className="fa-solid fa-magnifying-glass" />
           </button>
         </div>
